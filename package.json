@@ -5,6 +5,10 @@
   "type": "module",
   "license": "MIT",
   "author": "lynn",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lynn/leadlens.git"
+  },
   "engines": {
     "node": ">=22.5.0"
   },
