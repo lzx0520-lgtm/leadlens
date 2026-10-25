@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>线索透镜 LeadLens · 工作台</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <span class="mark" aria-hidden="true"></span>
+        <div>
+          <h1>线索透镜</h1>
+          <p>多平台公开数据工作台 · 本地运行 · 数据不出本机</p>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <span id="conn" class="conn">连接中…</span>
+        <a class="ghost" href="/api/export?type=leads&limit=5000" download>导出线索 CSV</a>
+      </div>
+    </header>
+
+    <main>
+      <section class="cards" id="cards">
+        <article class="card"><span>采集总数</span><b id="stat-items">0</b></article>
+        <article class="card"><span>线索总数</span><b id="stat-leads">0</b></article>
+        <article class="card"><span>待跟进</span><b id="stat-new" class="accent">0</b></article>
+        <article class="card"><span>已跟进</span><b id="stat-followed">0</b></article>
+        <article class="card"><span>启用规则</span><b id="stat-rules">0</b></article>
+      </section>
+
+      <nav class="tabs" role="tablist">
+        <button class="tab active" data-tab="leads" role="tab">线索池</button>
+        <button class="tab" data-tab="items" role="tab">采集数据</button>
+        <button class="tab" data-tab="rules" role="tab">监听规则</button>
+      </nav>
+
+      <section id="panel-leads" class="panel">
+        <div class="filters">
+          <select id="lead-status">
+            <option value="all">全部状态</option>
+            <option value="new">待跟进</option>
+            <option value="reviewing">沟通中</option>
+            <option value="followed">已跟进</option>
+            <option value="ignored">已忽略</option>
+          </select>
+          <select id="lead-platform">
+            <option value="all">全部平台</option>
+            <option value="douyin">抖音</option>
+            <option value="kuaishou">快手</option>
+            <option value="xiaohongshu">小红书</option>
+            <option value="bilibili">B站</option>
+          </select>
+          <label class="inline">意向分 ≥ <input id="lead-min" type="number" min="0" max="100" value="0" /></label>
+          <button id="lead-refresh" class="ghost" type="button">刷新</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th class="w-score">意向分</th>
+                <th class="w-plat">平台</th>
+                <th>昵称</th>
+                <th>内容</th>
+                <th class="w-tags">标签</th>
+                <th class="w-status">状态</th>
+                <th class="w-time">采集时间</th>
+              </tr>
+            </thead>
+            <tbody id="lead-rows"></tbody>
+          </table>
+        </div>
+        <p id="lead-empty" class="empty">还没有线索。装上扩展，去抖音/快手/小红书/B站的评论区待一会儿就有了。</p>
+      </section>
+
+      <section id="panel-items" class="panel hidden">
+        <div class="filters">
+          <select id="item-platform">
+            <option value="all">全部平台</option>
+            <option value="douyin">抖音</option>
+            <option value="kuaishou">快手</option>
+            <option value="xiaohongshu">小红书</option>
+            <option value="bilibili">B站</option>
+          </select>
+          <input id="item-q" type="search" placeholder="搜索内容 / 昵称 / 来源标题" />
+          <button id="item-search" class="ghost" type="button">搜索</button>
+          <a class="ghost" href="/api/export?type=items&limit=5000" download>导出全部 CSV</a>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th class="w-score">意向分</th>
+                <th class="w-plat">平台</th>
+                <th>昵称</th>
+                <th>内容</th>
+                <th class="w-num">点赞</th>
+                <th class="w-time">采集时间</th>
+              </tr>
+            </thead>
+            <tbody id="item-rows"></tbody>
+          </table>
+        </div>
+        <p id="item-empty" class="empty">暂无采集数据。</p>
+      </section>
+
+      <section id="panel-rules" class="panel hidden">
+        <form id="rule-form" class="rule-form">
+          <div class="field">
+            <label for="rule-name">规则名称</label>
+            <input id="rule-name" required placeholder="例如：本地生活-装修" />
+          </div>
+          <div class="field">
+            <label for="rule-platform">生效平台</label>
+            <select id="rule-platform">
+              <option value="all">全部平台</option>
+              <option value="douyin">抖音</option>
+              <option value="kuaishou">快手</option>
+              <option value="xiaohongshu">小红书</option>
+              <option value="bilibili">B站</option>
+            </select>
+          </div>
+          <div class="field grow">
+            <label for="rule-keywords">关键词（逗号分隔）</label>
+            <input id="rule-keywords" placeholder="装修, 报价, 上门量房" />
+          </div>
+          <div class="field w-min">
+            <label for="rule-min">入池分数线</label>
+            <input id="rule-min" type="number" min="0" max="100" value="45" />
+          </div>
+          <button class="primary" type="submit">新增规则</button>
+        </form>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>名称</th>
+                <th class="w-plat">平台</th>
+                <th>关键词</th>
+                <th class="w-num">分数线</th>
+                <th class="w-status">状态</th>
+                <th class="w-act"></th>
+              </tr>
+            </thead>
+            <tbody id="rule-rows"></tbody>
+          </table>
+        </div>
+        <p class="hint">
+          规则只影响「哪些内容会进线索池」。意向分由内置意向词库计算（询问价格、购买意愿、要联系方式等），
+          关键词命中会额外加分。想改判断标准，编辑 <code>server/leads.js</code> 里的词库。
+        </p>
+      </section>
+    </main>
+
+    <aside id="drawer" class="drawer" hidden>
+      <div class="drawer-head">
+        <h2>线索详情</h2>
+        <button id="drawer-close" class="icon" type="button" aria-label="关闭">×</button>
+      </div>
+      <div class="drawer-body">
+        <div class="kv"><span>平台</span><b id="d-platform">—</b></div>
+        <div class="kv"><span>昵称</span><b id="d-author">—</b></div>
+        <div class="kv"><span>意向分</span><b id="d-score" class="accent">—</b></div>
+        <div class="kv"><span>标签</span><b id="d-tags">—</b></div>
+        <div class="kv"><span>地区</span><b id="d-region">—</b></div>
+        <div class="kv"><span>来源</span><b id="d-title">—</b></div>
+        <blockquote id="d-text"></blockquote>
+        <a id="d-link" class="ghost block" target="_blank" rel="noreferrer">打开原帖</a>
+
+        <label class="field">
+          <span>跟进状态</span>
+          <select id="d-status">
+            <option value="new">待跟进</option>
+            <option value="reviewing">沟通中</option>
+            <option value="followed">已跟进</option>
+            <option value="ignored">已忽略</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>跟进备注</span>
+          <textarea id="d-note" rows="3" placeholder="记录沟通结果、报价、下次跟进时间…"></textarea>
+        </label>
+        <button id="d-save" class="primary block" type="button">保存</button>
+      </div>
+    </aside>
+
+    <script src="app.js"></script>
+  </body>
+</html>

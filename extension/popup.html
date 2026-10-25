@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="popup.css" />
+    <title>线索透镜 LeadLens</title>
+  </head>
+  <body>
+    <header class="head">
+      <div class="brand">
+        <span class="mark" aria-hidden="true"></span>
+        <div>
+          <strong>线索透镜</strong>
+          <small>LeadLens</small>
+        </div>
+      </div>
+      <span id="server-dot" class="dot" title="本地服务状态"></span>
+    </header>
+
+    <section class="card">
+      <div class="row">
+        <span>本地服务</span>
+        <b id="server-text">检测中…</b>
+      </div>
+      <div class="row">
+        <span>当前页面</span>
+        <b id="page-text">—</b>
+      </div>
+      <div class="row">
+        <span>识别到评论</span>
+        <b id="match-text">—</b>
+      </div>
+      <div class="row">
+        <span>待发送</span>
+        <b id="queue-text">0</b>
+      </div>
+    </section>
+
+    <section class="stats">
+      <div>
+        <b id="stat-inserted">0</b>
+        <span>今日入库</span>
+      </div>
+      <div>
+        <b id="stat-leads">0</b>
+        <span>生成线索</span>
+      </div>
+    </section>
+
+    <label class="switch">
+      <input id="toggle" type="checkbox" />
+      <span>在支持的页面自动采集</span>
+    </label>
+
+    <div class="actions">
+      <button id="open-dashboard" class="primary" type="button">打开工作台</button>
+      <button id="sync-now" type="button">立即同步</button>
+    </div>
+
+    <details class="advanced">
+      <summary>页面改版了？手动指定评论容器</summary>
+      <p id="hint">填一条 CSS 选择器，会最优先尝试。留空则使用内置规则。</p>
+      <input id="selector" type="text" placeholder='例如 [data-e2e="comment-item"]' />
+      <button id="save-selector" type="button">保存并重新扫描</button>
+    </details>
+
+    <p class="foot">
+      只采集当前页面上公开可见的内容，不会自动滚动、点赞或私信。
+    </p>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

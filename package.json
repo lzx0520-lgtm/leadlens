@@ -1,0 +1,23 @@
+{
+  "name": "leadlens",
+  "version": "0.1.0",
+  "description": "线索透镜 · 开源的多平台社媒公开数据工作台（抖音 / 快手 / 小红书 / B站）",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.5.0"
+  },
+  "scripts": {
+    "start": "node --disable-warning=ExperimentalWarning server/index.js",
+    "dev": "node --disable-warning=ExperimentalWarning --watch server/index.js",
+    "test": "node --disable-warning=ExperimentalWarning --test"
+  },
+  "keywords": [
+    "douyin",
+    "kuaishou",
+    "xiaohongshu",
+    "bilibili",
+    "chrome-extension",
+    "lead-generation"
+  ]
+}
