@@ -71,6 +71,7 @@ node scripts/seed-demo.mjs
 1. Chrome / Edge 打开 `chrome://extensions`
 2. 右上角打开「开发者模式」
 3. 「加载已解压的扩展程序」→ 选本仓库的 `extension/` 目录
+   （或从 [Releases](https://github.com/lzx0520-lgtm/leadlens/releases) 下载 `leadlens-extension-*.zip`，解压后再选解压出来的目录）
 4. 打开抖音/快手/小红书/B站的任意视频或笔记页，点评论区，扩展图标上会出现采集计数
 5. 点扩展图标 → 「打开工作台」看线索池
 
@@ -137,6 +138,7 @@ npm run dev                  # 改服务端代码自动重启
 npm test                     # 跑测试（31 项）
 node scripts/seed-demo.mjs   # 灌演示数据
 node scripts/make-icons.mjs  # 重新生成扩展图标
+npm run package              # 打包扩展 → dist/leadlens-extension-<版本>.zip
 ```
 
 环境变量：

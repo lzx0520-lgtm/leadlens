@@ -64,3 +64,16 @@ jobs:
           }
           console.log('icons OK');
           "
+
+      - name: 打包扩展
+        run: |
+          npm run package
+          node -e "
+          const fs = require('fs');
+          const version = require('./package.json').version;
+          const zip = fs.readFileSync('dist/leadlens-extension-' + version + '.zip');
+          if (zip.subarray(0, 4).toString('hex') !== '504b0304') {
+            throw new Error('不是合法 zip');
+          }
+          console.log('zip OK');
+          "
