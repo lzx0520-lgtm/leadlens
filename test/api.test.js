@@ -170,6 +170,14 @@ test('非法 JSON 返回 400', async () => {
   assert.equal(response.status, 400);
 });
 
+test('请求体超过 2MB 返回 413，而不是把连接断开', async () => {
+  const response = await post('/api/ingest', {
+    items: [{ platform: 'douyin', text: 'x'.repeat(2 * 1024 * 1024 + 10) }],
+  });
+  assert.equal(response.status, 413);
+  assert.equal((await response.json()).error, '请求体过大');
+});
+
 test('未知 API 返回 404 JSON，未知页面返回 404', async () => {
   const api = await fetch(`${base}/api/nope`);
   assert.equal(api.status, 404);

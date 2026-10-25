@@ -38,11 +38,15 @@ function readBody(req) {
   return new Promise((resolve, reject) => {
     const chunks = [];
     let size = 0;
+    let overflow = false;
     req.on('data', (chunk) => {
+      if (overflow) return;
       size += chunk.length;
       if (size > maxBodyBytes) {
+        // 不能 destroy：连接一断，413 就发不回去了，客户端只会看到 reset
+        overflow = true;
+        chunks.length = 0;
         reject(Object.assign(new Error('请求体过大'), { status: 413 }));
-        req.destroy();
         return;
       }
       chunks.push(chunk);
