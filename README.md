@@ -1,5 +1,7 @@
 # 线索透镜 LeadLens
 
+[![CI](https://github.com/lynn/leadlens/actions/workflows/ci.yml/badge.svg)](https://github.com/lynn/leadlens/actions/workflows/ci.yml)
+
 开源的多平台社媒公开数据工作台。装一个浏览器扩展，把你在 **抖音 / 快手 / 小红书 / B站** 页面上能看到的公开评论，自动汇总到本机的工作台，并按意向自动打分、筛选、导出。
 
 - **免费**：MIT 协议，无卡密、无授权服务器、无试用期
